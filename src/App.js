@@ -1,9 +1,11 @@
 import "./App.css";
 import Practice from "./Practice";
 import useInputs from "./useInputs";
-import { useCallback, useMemo, useReducer, useRef } from "react";
+import React, { useCallback, useMemo, useReducer, useRef } from "react";
 import CreateUser from "./CreateUsers";
 import UserList from "./UserList";
+
+export const UserDispatch = React.createContext(null);
 
 function countActiveUsers(users) {
   console.log("활성 세는 중...");
@@ -76,21 +78,8 @@ function App() {
     nextId.current += 1;
   }, [username, email, reset]);
 
-  const onToggle = useCallback((id) => {
-    dispatch({
-      type: "TOGGLE_USER",
-      id,
-    });
-  }, []);
-
-  const onRemove = useCallback((id) => {
-    dispatch({
-      type: "REMOVE_USER",
-      id,
-    });
-  }, []);
-
   const count = useMemo(() => countActiveUsers(users, [users]));
+
   return (
     <div className="App">
       <CreateUser
@@ -99,7 +88,7 @@ function App() {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} onToggle={onToggle} onRemove={onRemove} />
+      <UserList users={users} />
       <Practice />
     </div>
   );
